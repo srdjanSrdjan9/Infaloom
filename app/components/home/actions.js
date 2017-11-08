@@ -1,0 +1,9 @@
+import t from 'tcomb';
+
+export const CALCULATE_DISCOUNT = 'CALCULATE_DISCOUNT';
+export const CHANGE_SELECTION = 'CHANGE_SELECTION';
+export const SORT_CHANGE = 'SORT_CHANGE';
+export const REFRESH_DATASET = 'REFRESH_DATASET';
+export const DATA_RECEIVED = 'DATA_RECEIVED';
+export const DATA_FAILED = 'DATA_FAILED';
+export const DISCOUNT_CHANGE = 'DISCOUNT_CHANGE';
