@@ -23,7 +23,6 @@ const initialState = {
   selectedProduct: null,
   discount: 10,
   products: products,
-  status: '',
   sortInfo: null
 };
 
@@ -33,8 +32,7 @@ function sort(sortInfo, arr) {
 
 export function* init() {
   return {
-    ...initialState,
-    status: 'pending'
+    ...initialState
   };
 }
 
@@ -49,6 +47,7 @@ function* reducer(state = initialState, action = {}) {
     }
     case CHANGE_SELECTION: {
       const selected = state.products.find(x => x.id === action.id);
+
       return {
         ...state,
         selectedProduct: selected
@@ -59,10 +58,8 @@ function* reducer(state = initialState, action = {}) {
 
       products.forEach(x => {
         if (state.selectedProduct && x.id == state.selectedProduct.id) {
-          // state.selectedProduct.price = (state.selectedProduct.price * (100 - state.discount)) / 100;
           x.discountValue = x.price * state.discount / 100; 
           x.price = (x.price * (100 - state.discount)) / 100;
-          
         }
       });
 
