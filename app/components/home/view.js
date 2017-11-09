@@ -15,11 +15,12 @@ export default class Home extends Component {
     dispatch({ value, type: DISCOUNT_CHANGE });
   }
 
-  changeQuantity(event) {
+  changeQuantity(cellProps, event) {
     const { dispatch } = this.props;
-    const value = event.target.value;
+    const valueNumber = event.target.value;
+    const element = cellProps;
 
-    dispatch({ value, type: QUANTITY_CHANGE });
+    dispatch({ value: {id: element.id, quantity: valueNumber}, type: QUANTITY_CHANGE });
   }
 
   renderColumns(dispatch) {
@@ -28,7 +29,8 @@ export default class Home extends Component {
       { name: 'description' },
       { name: 'price' },
       { name: 'quantity', title: 'Quantity', 
-      render: (value, data, cellProps) => {return  <input type="number" min="0" defaultValue={value} onChange={this.changeQuantity.bind(this)} /> } },
+      render: (value, data, cellProps) => {return  <input type="number" min="0" defaultValue={value} 
+      onChange={this.changeQuantity.bind(this, data)} /> } },
       { name: 'cost', title: 'Cost' }
     ];
 

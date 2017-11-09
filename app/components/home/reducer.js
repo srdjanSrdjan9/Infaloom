@@ -77,10 +77,11 @@ function* reducer(state = initialState, action = {}) {
     }
     case QUANTITY_CHANGE: {
       let products = state.products;
-      const quantity = action.value;
-
+      const quantity = action.value.quantity;
+      const id = action.value.id;
+// console.log(id, quantity)
       products.forEach(x => {
-        if (state.selectedProduct && x.id == state.selectedProduct.id) {
+        if (x.id == id) {
           x.cost = x.price * quantity;
         }
       });
