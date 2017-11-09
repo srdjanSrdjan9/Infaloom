@@ -9,7 +9,8 @@ const columns = [
   { name: 'name' },
   { name: 'description' },
   { name: 'price' },
-  { name: 'discountValue', title: 'Discount value'}
+  { name: 'quantity', title: 'Quantity', render: (value) => (<input type="number" defaultValue={value} />) },
+  { name: 'cost', title: 'Cost' }
 ];
 
 export default class Home extends Component {
@@ -36,10 +37,20 @@ export default class Home extends Component {
           onSelectionChange={(id) => dispatch({ type: CHANGE_SELECTION, id })}
           onSortChange={(sort) => dispatch({ type: SORT_CHANGE, sortInfo: sort })}
         />
-        <label>Select value of discount in %</label> <t />
-        <input type="number" min="0" value={discount} onChange={this.changeDiscount.bind(this)} />
-        <br />
-        <Button bsStyle="primary" onClick={() => dispatch({ type: CALCULATE_DISCOUNT })}> Calculate discount </Button>
+        <div style={{ textAlign: 'right', paddingRight: 20 }}>
+          <div>
+            <label>Total Cost</label> <t />
+            <input type="number" readOnly disabled value="700" />
+          </div>
+          <div>
+            <label>Select value of discount in %</label> <t />
+            <input type="number" min="0" value={discount} onChange={this.changeDiscount.bind(this)} />
+          </div>
+          <div>
+            <label>Cost after discount</label> <t />
+            <input type="number" readOnly disabled value="630" />
+          </div>
+        </div>
       </div>
     );
   }
