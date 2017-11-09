@@ -7,7 +7,8 @@ import {
   DATA_RECEIVED,
   CHANGE_SELECTION,
   REFRESH_DATASET,
-  SORT_CHANGE
+  SORT_CHANGE,
+  QUANTITY_CHANGE
 } from './actions';
 
 import { sideEffect } from 'redux-side-effects';
@@ -58,7 +59,7 @@ function* reducer(state = initialState, action = {}) {
 
       products.forEach(x => {
         if (state.selectedProduct && x.id == state.selectedProduct.id) {
-          x.discountValue = x.price * state.discount / 100; 
+          x.discountValue = x.price * state.discount / 100;
           x.price = (x.price * (100 - state.discount)) / 100;
         }
       });
@@ -73,6 +74,21 @@ function* reducer(state = initialState, action = {}) {
         ...state,
         discount: action.value
       };
+    }
+    case QUANTITY_CHANGE: {
+      let products = state.products;
+      const quantity = action.value;
+
+      products.forEach(x => {
+        if (state.selectedProduct && x.id == state.selectedProduct.id) {
+          x.cost = x.price * quantity;
+        }
+      });
+     
+      return {
+        ...state,
+        products
+      }
     }
   };
 }

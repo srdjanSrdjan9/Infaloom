@@ -3,18 +3,11 @@ import DataGrid from 'react-datagrid';
 import { Button } from 'react-bootstrap';
 import 'react-datagrid/index.css';
 
-import { CALCULATE_DISCOUNT, SORT_CHANGE, CHANGE_SELECTION, DISCOUNT_CHANGE } from './actions';
-
-const columns = [
-  { name: 'name' },
-  { name: 'description' },
-  { name: 'price' },
-  { name: 'quantity', title: 'Quantity', render: (value) => (<input type="number" defaultValue={value} />) },
-  { name: 'cost', title: 'Cost' }
-];
+import { CALCULATE_DISCOUNT, SORT_CHANGE, CHANGE_SELECTION, DISCOUNT_CHANGE, QUANTITY_CHANGE } from './actions';
+import { getTotalCost, calculateDiscount } from './selectors';
 
 export default class Home extends Component {
-
+  
   changeDiscount(event) {
     const { dispatch } = this.props;
     const value = event.target.value;
@@ -22,15 +15,37 @@ export default class Home extends Component {
     dispatch({ value, type: DISCOUNT_CHANGE });
   }
 
+  changeQuantity(event) {
+    const { dispatch } = this.props;
+    const value = event.target.value;
+
+    dispatch({ value, type: QUANTITY_CHANGE });
+  }
+
+  renderColumns(dispatch) {
+    const columns = [
+      { name: 'name' },
+      { name: 'description' },
+      { name: 'price' },
+      { name: 'quantity', title: 'Quantity', 
+      render: (value, data, cellProps) => {return  <input type="number" min="0" defaultValue={value} onChange={this.changeQuantity.bind(this)} /> } },
+      { name: 'cost', title: 'Cost' }
+    ];
+
+    return columns;
+  }
+
   render() {
     const { state, dispatch } = this.props;
     const { products, selectedProduct, sortInfo, discount } = state;
+    const total = getTotalCost(state);
+    const totalWithDiscount = calculateDiscount(state);
 
     return (
       <div>
         <DataGrid
           idProperty="id"
-          columns={columns}
+          columns={this.renderColumns(dispatch)}
           dataSource={products}
           sortInfo={sortInfo}
           selected={selectedProduct ? selectedProduct.id : null}
@@ -40,7 +55,7 @@ export default class Home extends Component {
         <div style={{ textAlign: 'right', paddingRight: 20 }}>
           <div>
             <label>Total Cost</label> <t />
-            <input type="number" readOnly disabled value="700" />
+            <input type="number" readOnly disabled value={total} />
           </div>
           <div>
             <label>Select value of discount in %</label> <t />
@@ -48,7 +63,7 @@ export default class Home extends Component {
           </div>
           <div>
             <label>Cost after discount</label> <t />
-            <input type="number" readOnly disabled value="630" />
+            <input type="number" readOnly disabled value={totalWithDiscount} />
           </div>
         </div>
       </div>
